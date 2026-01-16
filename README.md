@@ -1,2 +1,2 @@
 # Student-Attendance-Management-System
-Project for Database and Management Systems Labvhvh h hg
+Project for DATABASE & MANAGEMENT SYSTEM
