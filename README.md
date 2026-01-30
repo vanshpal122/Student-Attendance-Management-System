@@ -1,57 +1,32 @@
 # 📘 Student Attendance Management System  
 **Database Management Systems Lab Project**
 
-## 📌 Project Overview
-The **Student Attendance Management System** is a database-driven application designed to manage, store, and track student attendance efficiently. The system reduces manual effort, minimizes errors, and provides quick access to attendance records for students and faculty. This project demonstrates the practical application of database design concepts learned in the DBMS lab.
+## 📌 Functional Requirements
 
-## 🎯 Objectives
-- To design a structured database for managing student attendance  
-- To implement relational database concepts such as keys, constraints, and normalization  
-- To perform CRUD (Create, Read, Update, Delete) operations on attendance records  
-- To ensure data accuracy and integrity  
-- To generate attendance reports efficiently  
+### Student Perspective
+1. View the **attendance percentage** for all enrolled courses.
+2. Access a **detailed attendance view** for each course, including:
+   - Days marked as holidays  
+   - Days the student was absent  
+   - Reasons for absence submitted by the teacher
+3. Identify courses in which the student’s attendance **falls below the required percentage threshold**.
+
+### Teacher Perspective
+1. **Mark attendance** for a specific course on a specific date using student roll numbers.
+2. **Add reasons for student absences** (reasons may also be added or updated at a later time).
+3. View a list of **students whose attendance is below a specified percentage threshold**.
 
 ## 🛠️ Technologies Used
 - **Database:** MySQL  
 - **Language:** SQL  
 - **Tools:** MySQL Workbench
 
-## 🗂️ Database Design
-### Main Entities:
-<!-- 
-- Student  
-- Course  
-- Faculty  
-- Attendance  
-- Department
--->
-
 ### Key Concepts To Use:
 - Primary Key  
 - Foreign Key  
 - Entity-Relationship (ER) Model  
 - Normalization (up to 3NF)  
-- Joins and Subqueries  
-
-## ⚙️ Features
-<!-- 
-- Student registration and management  
-- Course and faculty management  
-- Daily attendance marking  
-- Attendance update and deletion  
-- Attendance report generation  
-- Secure and structured data storage
--->
-
-
-## 🧪 Sample Operations
-<!-- 
-- Insert student and course records  
-- Mark attendance for a specific date  
-- Retrieve attendance percentage for a student  
-- Generate course-wise attendance reports 
-
--->
+- Joins and Subqueries
  
 
 ## 👥 Team Members
@@ -61,12 +36,6 @@ The **Student Attendance Management System** is a database-driven application de
 | Vansh Pal     |  23BCS122   |
 | Vir Daksh     |  23BCS123   |
 | Virendra Sahu |  23BCS124   |
-
-## 📚 Learning Outcomes
-- Hands-on experience with relational databases  
-- Understanding real-world database applications  
-- Improved SQL query writing skills  
-- Experience in teamwork and project development  
 
 ## 🏫 Course Information
 - **Course Name:** Database Management Systems Lab  
