@@ -38,7 +38,8 @@
 | Virendra Sahu |  23BCS124   |
 
 ## 🏫 Course Information
-- **Course Name:** Database Management Systems Lab  
+- **Course Name:** Database Management Systems Lab
+- **Course Code:** CS-325  
 - **Institution:** National Institute of Technology Hamirpur  
 - **Semester:** 6
 - **Academic Year:** 2026  
