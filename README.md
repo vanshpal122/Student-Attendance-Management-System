@@ -22,10 +22,13 @@
 - **Tools:** MySQL Workbench
 
 ### Key Concepts To Use:
-- Primary Key  
+- Entity-Relationship (ER) Model
+- Schema
+- Views
+- Authorization
+- Primary Key
 - Foreign Key  
-- Entity-Relationship (ER) Model  
-- Normalization (up to 3NF)  
+- Normalization 
 - Joins and Subqueries
  
 
