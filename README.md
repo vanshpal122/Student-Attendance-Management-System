@@ -6,7 +6,7 @@
 ### Student Perspective
 1. View the **attendance percentage** for all enrolled courses.
 2. Access a **detailed attendance view** for each course, including:
-   - Days marked as holidays  
+   - Days marked as off days  
    - Days the student was absent  
    - Reasons for absence submitted by the teacher
 3. Identify courses in which the student’s attendance **falls below the required percentage threshold**.
@@ -15,6 +15,7 @@
 1. **Mark attendance** for a specific course on a specific date using student roll numbers.
 2. **Add reasons for student absences** (reasons may also be added or updated at a later time).
 3. View a list of **students whose attendance is below a specified percentage threshold**.
+4. Mark the day when classes are off.
 
 ## 🛠️ Technologies Used
 - **Database:** MySQL  
