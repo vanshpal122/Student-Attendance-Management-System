@@ -36,7 +36,7 @@
 ## 👥 Team Members
 | Name          | Roll Number |
 |---------------|-------------|
-| Bhavya Biju   |  23BCS125   |
+| Bhavya biju   |  23BCS125   |
 | Vansh Pal     |  23BCS122   |
 | Vir Daksh     |  23BCS123   |
 | Virendra Sahu |  23BCS124   |
