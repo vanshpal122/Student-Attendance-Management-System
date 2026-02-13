@@ -17,10 +17,12 @@
 3. View a list of **students whose attendance is below a specified percentage threshold**.
 4. Mark the day when classes are off.
 
+## 📌 ER Diagram
+![ER Diagram](ERDiagram.png)
 ## 🛠️ Technologies Used
 - **Database:** MySQL  
 - **Language:** SQL  
-- **Tools:** MySQL Workbench
+- **Tools:** MySQL Workbench, draw.io
 
 ### Key Concepts To Use:
 - Entity-Relationship (ER) Model
