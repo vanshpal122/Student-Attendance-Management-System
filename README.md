@@ -16,7 +16,6 @@
 2. **Add reasons for student absences** (reasons may also be added or updated at a later time).
 3. View a list of **students whose attendance is below a specified percentage threshold**.
 4. Mark the day when classes are off.
-
 ## 📌 ER Diagram
 ![ER Diagram](ERDiagram.png)
 ## 🛠️ Technologies Used
@@ -26,6 +25,8 @@
 
 ### Key Concepts To Use:
 - Entity-Relationship (ER) Model
+- Aggregation
+- Specialization
 - Schema
 - Views
 - Authorization
