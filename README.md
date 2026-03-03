@@ -16,8 +16,23 @@
 2. **Add reasons for student absences** (reasons may also be added or updated at a later time).
 3. View a list of **students whose attendance is below a specified percentage threshold**.
 4. Mark the day when classes are off.
+
 ## 📌 ER Diagram
+<details>
+<summary>Diagram</strong></summary>
+
 ![ER Diagram](ERDiagram.png)
+
+</details>
+
+## 📌 Relational Diagram
+<details>
+<summary>Diagram</strong></summary>
+
+![RelationalDiagram](RelationalDiagram.png)
+
+</details>
+
 ## 🛠️ Technologies Used
 - **Database:** MySQL  
 - **Language:** SQL  
