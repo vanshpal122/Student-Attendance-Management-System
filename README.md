@@ -25,14 +25,6 @@
 
 </details>
 
-## 📌 Relational Diagram
-<details>
-<summary>Diagram</strong></summary>
-
-![RelationalDiagram](RelationalDiagram.png)
-
-</details>
-
 ## 🛠️ Technologies Used
 - **Database:** MySQL  
 - **Language:** SQL  
