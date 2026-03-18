@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface OffDayRepository extends JpaRepository<OffDay, LocalDate> {
     @Query("""
-            SELECT new com.example.student_attendance.dto.OffDayDTO(
+            SELECT new com.project.student_attendance.dto.OffDayDTO(
                 od.date,
                 od.reasonOfDayOff
             )
