@@ -12,7 +12,7 @@ import java.util.List;
 public interface AttendanceRepository extends JpaRepository<Attendance, AttendanceId> {
 
     @Query("""
-            SELECT new com.example.student_attendance.dto.AttendanceDTO(
+            SELECT new com.project.student_attendance.dto.AttendanceDTO(
                 a.id.date,
                 a.isPresent,
                 a.reasonOfAbsence
