@@ -1,6 +1,7 @@
 package com.project.student_attendance.service;
 
 import com.project.student_attendance.entities.course.Course;
+import com.project.student_attendance.entities.student_course.StudentCourseId;
 import com.project.student_attendance.repository.StudentCourseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

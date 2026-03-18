@@ -1,17 +1,16 @@
 package com.project.student_attendance.controller;
 
 import com.project.student_attendance.dto.AttendanceCalendarDTO;
-import com.project.student_attendance.dto.MarkAttendanceRequest;
-import com.project.student_attendance.dto.OffDayRequest;
 import com.project.student_attendance.entities.course.Course;
+import com.project.student_attendance.repository.StudentRepository;
 import com.project.student_attendance.service.AttendanceService;
 import com.project.student_attendance.service.CourseService;
-import com.project.student_attendance.service.OffDayService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,12 +21,12 @@ public class StudentAttendanceController {
 
     private final CourseService courseService;
     private final AttendanceService attendanceService;
-    private final OffDayService offDayService;
+    private final StudentRepository studentRepository;
 
-    public StudentAttendanceController(CourseService courseService, AttendanceService attendanceService, OffDayService offDayService) {
+    public StudentAttendanceController(CourseService courseService, AttendanceService attendanceService, StudentRepository studentRepository) {
         this.courseService = courseService;
         this.attendanceService = attendanceService;
-        this.offDayService = offDayService;
+        this.studentRepository = studentRepository;
     }
 
     @GetMapping("/{rollNo}/courses")
@@ -36,6 +35,9 @@ public class StudentAttendanceController {
             @PageableDefault(size = 10)
             Pageable pageable
     ) {
+        if (!studentRepository.existsById(rollNo)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student with id" + rollNo + "not found");
+        }
         return courseService.getCourses(rollNo, pageable);
     }
 
@@ -49,35 +51,6 @@ public class StudentAttendanceController {
     ) {
         return attendanceService.getMonthlyCalendar(
                 rollNo, courseCode, startDate, year, month
-        );
-    }
-
-    @PostMapping("/{courseCode}/{startDate}/offdays")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void markDayAsOff(
-            @PathVariable String courseCode,
-            @PathVariable LocalDate startDate,
-            @RequestBody OffDayRequest request
-    ) {
-        offDayService.markDayAsOff(
-                courseCode,
-                startDate,
-                request.getDate(),
-                request.getReasonOfDayOff()
-        );
-    }
-
-    @PostMapping("/markattendance")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void markAttendance(@RequestBody MarkAttendanceRequest request) {
-
-        attendanceService.markAttendance(
-                request.getRollNo(),
-                request.getCourseCode(),
-                request.getCourseStartDate(),
-                request.getDate(),
-                request.getIsPresent(),
-                request.getReasonOfAbsence()
         );
     }
 }
