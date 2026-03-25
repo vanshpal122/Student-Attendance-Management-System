@@ -27,8 +27,8 @@
 
 ## 🛠️ Technologies Used
 - **Database:** MySQL  
-- **Language:** SQL  
-- **Tools:** MySQL Workbench, draw.io
+- **Language:** SQL, Java, HTML
+- **Tools:** MySQL Workbench, draw.io, Liquibase, Spring Boot, Git, GitHub
 
 ### Key Concepts To Use:
 - Entity-Relationship (ER) Model
