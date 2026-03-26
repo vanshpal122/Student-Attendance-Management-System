@@ -21,6 +21,7 @@ public class TeacherController {
         this.offDayService = offDayService;
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/{courseCode}/{startDate}/offdays")
     @ResponseStatus(HttpStatus.CREATED)
     public void markDayAsOff(
@@ -36,6 +37,7 @@ public class TeacherController {
         );
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/markattendance")
     @ResponseStatus(HttpStatus.CREATED)
     public void markAttendance(@RequestBody MarkAttendanceRequest request) {

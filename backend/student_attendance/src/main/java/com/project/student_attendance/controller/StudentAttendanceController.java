@@ -1,6 +1,7 @@
 package com.project.student_attendance.controller;
 
 import com.project.student_attendance.dto.AttendanceCalendarDTO;
+import com.project.student_attendance.entities.Student;
 import com.project.student_attendance.entities.course.Course;
 import com.project.student_attendance.repository.StudentRepository;
 import com.project.student_attendance.service.AttendanceService;
@@ -29,6 +30,16 @@ public class StudentAttendanceController {
         this.studentRepository = studentRepository;
     }
 
+    @CrossOrigin(origins = "*")
+    @GetMapping()
+    public Student getStudent(
+            @RequestParam String rollNo
+    ) {
+        return studentRepository.findById(rollNo)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student Not Found"));
+    }
+
+    @CrossOrigin(origins = "*")
     @GetMapping("/{rollNo}/courses")
     public Page<Course> getCourses(
             @PathVariable String rollNo,
@@ -41,6 +52,7 @@ public class StudentAttendanceController {
         return courseService.getCourses(rollNo, pageable);
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/{rollNo}/courses/{courseCode}/{startDate}/calendar")
     public List<AttendanceCalendarDTO> getMonthlyCalendar(
             @PathVariable String rollNo,
