@@ -2,11 +2,13 @@ package com.project.student_attendance.entities;
 
 import com.project.student_attendance.entities.student_course.StudentCourse;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "student")
+@Getter
 public class Student {
 
     @Id
