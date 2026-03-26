@@ -4,10 +4,12 @@ import com.project.student_attendance.dto.MarkAttendanceRequest;
 import com.project.student_attendance.dto.OffDayRequest;
 import com.project.student_attendance.service.AttendanceService;
 import com.project.student_attendance.service.OffDayService;
+import com.project.student_attendance.service.StudentCourseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/teacher")
@@ -15,10 +17,12 @@ public class TeacherController {
 
     private final OffDayService offDayService;
     private final AttendanceService attendanceService;
+    private final StudentCourseService studentCourseService;
 
-    public TeacherController(AttendanceService attendanceService, OffDayService offDayService) {
+    public TeacherController(AttendanceService attendanceService, OffDayService offDayService, StudentCourseService studentCourseService) {
         this.attendanceService = attendanceService;
         this.offDayService = offDayService;
+        this.studentCourseService = studentCourseService;
     }
 
     @CrossOrigin(origins = "*")
@@ -35,6 +39,15 @@ public class TeacherController {
                 request.getDate(),
                 request.getReasonOfDayOff()
         );
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/{courseCode}/{startDate}/enrolledStudents")
+    public List<String> getEnrolledStudents(
+            @PathVariable String courseCode,
+            @PathVariable LocalDate startDate
+    ) {
+        return studentCourseService.getEnrolledStudents(courseCode, startDate);
     }
 
     @CrossOrigin(origins = "*")

@@ -1,5 +1,6 @@
 package com.project.student_attendance.entities.attendance;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.project.student_attendance.entities.day.WorkingDay;
 import com.project.student_attendance.entities.student_course.StudentCourse;
 import jakarta.persistence.*;
@@ -23,12 +24,13 @@ public class Attendance {
     private WorkingDay workingDay;
 
     @MapsId("studentCourseId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "roll_no", referencedColumnName = "roll_no"),
             @JoinColumn(name = "course_code", referencedColumnName = "course_code"),
             @JoinColumn(name = "start_date", referencedColumnName = "start_date")
     })
+    @JsonBackReference
     private StudentCourse studentCourse;
 
     private boolean isPresent;

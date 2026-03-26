@@ -1,13 +1,8 @@
 package com.project.student_attendance.entities.student_course;
 
 import com.project.student_attendance.entities.course.CourseId;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -16,6 +11,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 @Embeddable
 public class StudentCourseId implements Serializable {
 
@@ -23,21 +19,9 @@ public class StudentCourseId implements Serializable {
     private String rollNo;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "courseCode", column = @Column(name = "course_code")),
+            @AttributeOverride(name = "startDate", column = @Column(name = "start_date"))
+    })
     private CourseId courseId; // embed the composite key here
-
-    // getters and setters
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof StudentCourseId)) return false;
-        StudentCourseId other = (StudentCourseId) o;
-        return Objects.equals(rollNo, other.rollNo)
-                && Objects.equals(courseId, other.courseId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(rollNo, courseId);
-    }
 }

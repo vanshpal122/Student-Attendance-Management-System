@@ -1,5 +1,6 @@
 package com.project.student_attendance.repository;
 
+import com.project.student_attendance.entities.Student;
 import com.project.student_attendance.entities.course.Course;
 import com.project.student_attendance.entities.student_course.StudentCourse;
 import com.project.student_attendance.entities.student_course.StudentCourseId;
@@ -8,6 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface StudentCourseRepository
         extends JpaRepository<StudentCourse, StudentCourseId> {
@@ -22,5 +26,16 @@ public interface StudentCourseRepository
     Page<Course> findCoursesByRollNo(
             @Param("rollNo") String rollNo,
             Pageable pageable
+    );
+
+    @Query("""
+    SELECT sc.student.rollNo
+    FROM StudentCourse sc
+    WHERE sc.course.id.courseCode = :courseCode 
+      AND sc.course.id.startDate = :startDate
+""")
+    List<String> getEnrolledStudents(
+            @Param("courseCode") String courseCode,
+            @Param("startDate") LocalDate startDate
     );
 }

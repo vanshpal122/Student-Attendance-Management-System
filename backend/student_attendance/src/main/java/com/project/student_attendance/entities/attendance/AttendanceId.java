@@ -1,9 +1,7 @@
 package com.project.student_attendance.entities.attendance;
 
 import com.project.student_attendance.entities.student_course.StudentCourseId;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +18,11 @@ import java.util.Objects;
 @Embeddable
 public class AttendanceId implements Serializable {
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "rollNo", column = @Column(name = "roll_no")),
+            @AttributeOverride(name = "courseId.courseCode", column = @Column(name = "course_code")),
+            @AttributeOverride(name = "courseId.startDate", column = @Column(name = "start_date"))
+    })
     private StudentCourseId studentCourseId;
 
     @Column(name = "date")
@@ -44,9 +47,7 @@ public class AttendanceId implements Serializable {
     @Override
     public String toString() {
         return "AttendanceId{" +
-                "rollNo=" + studentCourseId.getRollNo() +
-                ", courseCode=" + studentCourseId.getCourseId().getCourseCode() +
-                ", startDate=" + studentCourseId.getCourseId().getStartDate() +
+                "studentCourseId=" + studentCourseId +
                 ", date=" + date +
                 '}';
     }
