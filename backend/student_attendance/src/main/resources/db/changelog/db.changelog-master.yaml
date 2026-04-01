@@ -1,0 +1,240 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: vansh
+      changes:
+
+        - createTable:
+            tableName: branch
+            columns:
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+        - createTable:
+            tableName: instructor
+            columns:
+              - column:
+                  name: id
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: branch
+                  type: varchar(255)
+              - column:
+                  name: name
+                  type: varchar(255)
+        - addForeignKeyConstraint:
+            baseTableName: instructor
+            baseColumnNames: branch
+            referencedTableName: branch
+            referencedColumnNames: name
+            constraintName: fk_instructor_branch
+
+        - createTable:
+            tableName: student
+            columns:
+              - column:
+                  name: roll_no
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: branch
+                  type: varchar(255)
+              - column:
+                  name: name
+                  type: varchar(255)
+        - addForeignKeyConstraint:
+            baseTableName: student
+            baseColumnNames: branch
+            referencedTableName: branch
+            referencedColumnNames: name
+            constraintName: fk_student_branch
+
+
+
+
+        - createTable:
+            tableName: course
+            columns:
+              - column:
+                  name: start_date
+                  type: date
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: course_code
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: end_date
+                  type: date
+
+
+              - column:
+                  name: branch
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: name
+                  type: varchar(255)
+
+              - column:
+                  name: instructor_id
+                  type: varchar(255)
+
+        - addForeignKeyConstraint:
+            baseTableName: course
+            baseColumnNames: instructor_id
+            referencedTableName: instructor
+            referencedColumnNames: id
+            constraintName: fk_course_instructor
+
+        - addForeignKeyConstraint:
+            baseTableName: course
+            baseColumnNames: branch
+            referencedTableName: branch
+            referencedColumnNames: name
+            constraintName: fk_course_branch
+        - addPrimaryKey:
+            tableName: course
+            columnNames: start_date, course_code
+
+        - createTable:
+            tableName: working_day
+            columns:
+              - column:
+                  name: date
+                  type: date
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+        - createTable:
+            tableName: off_day
+            columns:
+              - column:
+                  name: date
+                  type: date
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: reason_of_day_off
+                  type: varchar(255)
+
+        - createTable:
+            tableName: student_course
+            columns:
+              - column:
+                  name: start_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: course_code
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: roll_no
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    references: student(roll_no)
+                    foreignKeyName: fk_sc_student
+        - addPrimaryKey:
+            tableName: student_course
+            columnNames: start_date, course_code, roll_no
+        - addForeignKeyConstraint:
+            baseTableName: student_course
+            baseColumnNames: start_date, course_code
+            referencedTableName: course
+            referencedColumnNames: start_date, course_code
+            constraintName: fk_sc_course
+
+
+        - createTable:
+            tableName: course_off_day
+            columns:
+              - column:
+                  name: off_day_date
+                  type: date
+                  constraints:
+                    nullable: false
+                    references: off_day(date)
+                    foreignKeyName: fk_cod_offday
+              - column:
+                  name: start_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: course_code
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: course_off_day
+            columnNames: off_day_date, start_date, course_code
+        - addForeignKeyConstraint:
+            baseTableName: course_off_day
+            baseColumnNames: start_date, course_code
+            referencedTableName: course
+            referencedColumnNames: start_date, course_code
+            constraintName: fk_cod_course
+
+        - createTable:
+            tableName: attendance
+            columns:
+              - column:
+                  name: date
+                  type: date
+                  constraints:
+                    nullable: false
+                    references: working_day(date)
+                    foreignKeyName: fk_attendance_workingday
+              - column:
+                  name: start_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: course_code
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: roll_no
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_present
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reason_of_absence
+                  type: varchar(255)
+        - addPrimaryKey:
+            tableName: attendance
+            columnNames: date, start_date, course_code, roll_no
+        - addForeignKeyConstraint:
+            baseTableName: attendance
+            baseColumnNames: start_date, course_code, roll_no
+            referencedTableName: student_course
+            referencedColumnNames: start_date, course_code, roll_no
+            constraintName: fk_attendance_sc

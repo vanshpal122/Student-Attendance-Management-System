@@ -29,6 +29,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("io.github.cdimascio:dotenv-java:3.2.0")
     compileOnly("org.projectlombok:lombok")
+    implementation("org.springframework.boot:spring-boot-starter-liquibase")
     annotationProcessor("org.projectlombok:lombok")
     runtimeOnly ("com.mysql:mysql-connector-j")
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
