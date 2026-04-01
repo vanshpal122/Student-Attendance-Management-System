@@ -182,4 +182,18 @@ public class AttendanceService {
         attendanceRepository.save(attendance);
     }
 
+    public OverallAttendanceInfoDTO getOverallAttendanceInfo(String rollNo, String courseCode, LocalDate startDate, LocalDate presentDate) {
+        List<OffDayDTO> offDays =
+                offDayRepository.findCourseOffDays(
+                        courseCode, startDate, startDate, presentDate!=null? presentDate:LocalDate.now()
+                );
+        List<AttendanceDTO> attendance =
+                attendanceRepository.findMonthlyAttendance(
+                        rollNo, courseCode, startDate, startDate, presentDate!=null? presentDate:LocalDate.now()
+                );
+        return new OverallAttendanceInfoDTO(
+                attendance.size(),
+                attendance.stream().filter(AttendanceDTO::isPresent).toList().size(),
+                offDays.size());
+        }
 }

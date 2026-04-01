@@ -1,5 +1,6 @@
 package com.project.student_attendance.controller;
 
+import com.project.student_attendance.dto.OverallAttendanceInfoDTO;
 import com.project.student_attendance.dto.StudentDayStatusDTO;
 import com.project.student_attendance.dto.CourseDTO;
 import com.project.student_attendance.dto.StudentDTO;
@@ -64,5 +65,16 @@ public class StudentAttendanceController {
         return attendanceService.getMonthlyCalendar(
                 rollNo, courseCode, startDate, year, month
         );
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/{rollNo}/courses/{courseCode}/{startDate}/getOverallAttendanceInfo")
+    public OverallAttendanceInfoDTO getOverallAttendanceInfo(
+            @PathVariable String rollNo,
+            @PathVariable String courseCode,
+            @PathVariable LocalDate startDate,
+            @RequestParam LocalDate presentDate
+    ) {
+        return attendanceService.getOverallAttendanceInfo(rollNo, courseCode, startDate, presentDate);
     }
 }
