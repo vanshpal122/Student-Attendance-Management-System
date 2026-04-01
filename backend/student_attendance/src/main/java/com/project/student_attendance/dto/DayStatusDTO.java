@@ -1,4 +1,10 @@
 package com.project.student_attendance.dto;
 
-public class DayStatusDTO {
-}
+import java.time.LocalDate;
+
+public record DayStatusDTO(
+        LocalDate date,
+        Boolean isWorkingDay,
+        Boolean isMarked,
+        String offDayReason
+) {}

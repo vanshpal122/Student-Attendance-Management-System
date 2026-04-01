@@ -5,14 +5,8 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 
-@Getter
-@AllArgsConstructor
-public class DayStatusDTO {
-
-    private LocalDate date;
-    private Boolean isWorkingDay;
-    private Boolean isPresent;
-    private Boolean isMarked;
-    private String reasonOfAbsence;
-    private String offDayReason;
-}
+public record StudentDayStatusDTO(
+        DayStatusDTO dayStatusDTO,
+        Boolean isPresent,
+        String reasonOfAbsence
+) {}

@@ -1,8 +1,6 @@
 package com.project.student_attendance.service;
 
-import com.project.student_attendance.dto.AttendanceCalendarDTO;
-import com.project.student_attendance.dto.AttendanceDTO;
-import com.project.student_attendance.dto.OffDayDTO;
+import com.project.student_attendance.dto.*;
 import com.project.student_attendance.entities.attendance.Attendance;
 import com.project.student_attendance.entities.attendance.AttendanceId;
 import com.project.student_attendance.entities.course.CourseId;
@@ -29,25 +27,60 @@ public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final OffDayRepository offDayRepository;
     private final StudentCourseRepository studentCourseRepository;
-    private final WorkingDayRepository workingDayRepository;
+    private final WorkingDayService workingDayService;
 
-    public AttendanceService(AttendanceRepository attendanceRepository, OffDayRepository offDayRepository, StudentCourseRepository studentCourseRepository, WorkingDayRepository workingDayRepository) {
+    public AttendanceService(AttendanceRepository attendanceRepository, OffDayRepository offDayRepository, StudentCourseRepository studentCourseRepository, WorkingDayService workingDayService) {
         this.attendanceRepository = attendanceRepository;
         this.offDayRepository = offDayRepository;
         this.studentCourseRepository = studentCourseRepository;
-        this.workingDayRepository = workingDayRepository;
+        this.workingDayService = workingDayService;
     }
 
-    public List<AttendanceCalendarDTO> getMonthlyCalendar(
+    // Single date calendar
+    public DayStatusDTO getDayStatus(
+            String courseCode,
+            LocalDate startDate,
+            LocalDate date
+    ) {
+        // Fetch only for this specific date
+        OffDayDTO offDay = offDayRepository.findCourseOffDays(
+                courseCode, startDate, date, date
+        ).stream().findFirst().orElse(null);
+
+
+
+        if (offDay != null) {
+            return new DayStatusDTO(
+                    date,
+                    false,
+                    true,
+                    offDay.getReasonOfDayOff()
+            );
+        } else if (workingDayService.isWorkingDay(date)) {
+            return new DayStatusDTO(
+                    date,
+                    true,
+                    true,
+                    null
+            );
+        } else {
+            return new DayStatusDTO(
+                    date,
+                    null,
+                    false,
+                    null
+            );
+        }
+    }
+
+    public List<StudentDayStatusDTO> getMonthlyCalendar(
             String rollNo,
             String courseCode,
             LocalDate startDate,
             int year,
             int month
     ) {
-
         YearMonth ym = YearMonth.of(year, month);
-
         LocalDate start = ym.atDay(1);
         LocalDate end = ym.atEndOfMonth();
 
@@ -63,68 +96,68 @@ public class AttendanceService {
 
         Map<LocalDate, AttendanceDTO> attendanceMap =
                 attendance.stream()
-                        .collect(Collectors.toMap(
-                                AttendanceDTO::date,
-                                a -> a
-                        ));
+                        .collect(Collectors.toMap(AttendanceDTO::date, a -> a));
 
         Map<LocalDate, OffDayDTO> offDayMap =
                 offDays.stream()
-                        .collect(Collectors.toMap(
-                                OffDayDTO::getDate,
-                                o -> o
-                        ));
+                        .collect(Collectors.toMap(OffDayDTO::getDate, o -> o));
 
-        List<AttendanceCalendarDTO> calendar = new ArrayList<>();
+        // Stream over each day of the month
+        return start.datesUntil(end.plusDays(1))
+                .map(current -> {
+                    AttendanceDTO a = attendanceMap.get(current);
+                    OffDayDTO o = offDayMap.get(current);
 
-        LocalDate current = start;
+                    DayStatusDTO dayStatus;
+                    Boolean isPresent = null;
+                    String reasonOfAbsence = null;
 
-        while (!current.isAfter(end)) {
+                    if (o != null) {
+                        dayStatus = new DayStatusDTO(
+                                current,
+                                false,                 // isWorkingDay
+                                true,                  // isMarked
+                                o.getReasonOfDayOff()  // offDayReason
+                        );
+                    } else if (a != null) {
+                        dayStatus = new DayStatusDTO(
+                                current,
+                                true,   // isWorkingDay
+                                true,   // isMarked
+                                null    // offDayReason
+                        );
+                        isPresent = a.isPresent();
+                        reasonOfAbsence = a.reasonOfAbsence();
+                    } else {
+                        dayStatus = new DayStatusDTO(
+                                current,
+                                null,   // isWorkingDay unknown
+                                false,  // not marked
+                                null    // offDayReason
+                        );
+                    }
 
-            AttendanceDTO a = attendanceMap.get(current);
-            OffDayDTO o = offDayMap.get(current);
+                    return new StudentDayStatusDTO(dayStatus, isPresent, reasonOfAbsence);
+                })
+                .toList();
+    }
 
-            if (o != null) {
-                calendar.add(new AttendanceCalendarDTO(
-                        current,
-                        false,
-                        null,
-                        null,
-                        o.getReasonOfDayOff()
-                ));
-            } else if (a != null) {
-                calendar.add(new AttendanceCalendarDTO(
-                        current,
-                        true,
-                        a.isPresent(),
-                        a.reasonOfAbsence(),
-                        null
-                ));
-            } else {
-                calendar.add(new AttendanceCalendarDTO(
-                        current,
-                        true,
-                        null,
-                        null,
-                        null
-                ));
-            }
-
-            current = current.plusDays(1);
-        }
-
-        return calendar;
+    public void markAttendanceBatch(
+            List<MarkAttendanceRequest> request
+    ) {
+        request.forEach(this::markAttendance);
     }
 
     @Transactional
     public void markAttendance(
-            String rollNo,
-            String courseCode,
-            LocalDate courseStartDate,
-            LocalDate date,
-            Boolean isPresent,
-            String reason
+            MarkAttendanceRequest markAttendanceDTO
     ) {
+        String rollNo = markAttendanceDTO.getRollNo();
+        String courseCode = markAttendanceDTO.getCourseCode();
+        LocalDate courseStartDate = markAttendanceDTO.getCourseStartDate();
+        LocalDate date = markAttendanceDTO.getDate();
+        Boolean isPresent = markAttendanceDTO.getIsPresent();
+        String reason = markAttendanceDTO.getReasonOfAbsence();
         CourseId courseId = new CourseId(courseCode, courseStartDate);
         StudentCourseId studentCourseId =
                 new StudentCourseId(rollNo, courseId);
@@ -134,13 +167,7 @@ public class AttendanceService {
                 .orElseThrow(() -> new RuntimeException("StudentCourse not found"));
 
         // Ensure WorkingDay exists
-        WorkingDay workingDay = workingDayRepository
-                .findById(date)
-                .orElseGet(() -> {
-                    WorkingDay wd = new WorkingDay();
-                    wd.setDate(date);
-                    return workingDayRepository.save(wd);
-                });
+        WorkingDay workingDay = workingDayService.getAndSave(date);
 
         AttendanceId attendanceId = new AttendanceId(studentCourseId, date);
 

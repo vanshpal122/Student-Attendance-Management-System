@@ -1,25 +1,24 @@
 package com.project.student_attendance.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
+@Getter
+@Setter
 public class OffDayRequest {
 
+    private String courseCode;
+    private LocalDate startDate;
     private LocalDate date;
     private String reasonOfDayOff;
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public String getReasonOfDayOff() {
-        return reasonOfDayOff;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public void setReasonOfDayOff(String reasonOfDayOff) {
-        this.reasonOfDayOff = reasonOfDayOff;
+    @Override
+    public String toString() {
+        return "CourseCode " + courseCode + "\n" +
+                "startDate " + startDate + "\n" +
+                "date " + date + "\n" +
+                "reasonOfDayOff " + reasonOfDayOff;
     }
 }

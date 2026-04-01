@@ -1,5 +1,6 @@
 package com.project.student_attendance.entities.student_course;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.project.student_attendance.entities.Student;
 import com.project.student_attendance.entities.attendance.Attendance;
 import com.project.student_attendance.entities.course.Course;
@@ -17,6 +18,7 @@ public class StudentCourse {
     private StudentCourseId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @MapsId("rollNo")
     @JoinColumn(name = "roll_no")
     private Student student;

@@ -1,11 +1,11 @@
 package com.project.student_attendance.controller;
 
-import com.project.student_attendance.dto.AttendanceCalendarDTO;
-import com.project.student_attendance.entities.Student;
-import com.project.student_attendance.entities.course.Course;
-import com.project.student_attendance.repository.StudentRepository;
+import com.project.student_attendance.dto.StudentDayStatusDTO;
+import com.project.student_attendance.dto.CourseDTO;
+import com.project.student_attendance.dto.StudentDTO;
 import com.project.student_attendance.service.AttendanceService;
-import com.project.student_attendance.service.CourseService;
+import com.project.student_attendance.service.StudentCourseService;
+import com.project.student_attendance.service.StudentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,41 +20,41 @@ import java.util.List;
 @RequestMapping("/students")
 public class StudentAttendanceController {
 
-    private final CourseService courseService;
+    private final StudentCourseService studentCourseService;
     private final AttendanceService attendanceService;
-    private final StudentRepository studentRepository;
+    private final StudentService studentService;
 
-    public StudentAttendanceController(CourseService courseService, AttendanceService attendanceService, StudentRepository studentRepository) {
-        this.courseService = courseService;
+    public StudentAttendanceController(StudentCourseService studentCourseService, AttendanceService attendanceService, StudentService studentService) {
+        this.studentCourseService = studentCourseService;
         this.attendanceService = attendanceService;
-        this.studentRepository = studentRepository;
+        this.studentService = studentService;
     }
 
     @CrossOrigin(origins = "*")
     @GetMapping()
-    public Student getStudent(
+    public StudentDTO getStudent(
             @RequestParam String rollNo
     ) {
-        return studentRepository.findById(rollNo)
+        return studentService.getStudentDetails(rollNo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student Not Found"));
     }
 
     @CrossOrigin(origins = "*")
     @GetMapping("/{rollNo}/courses")
-    public Page<Course> getCourses(
+    public Page<CourseDTO> getCourses(
             @PathVariable String rollNo,
             @PageableDefault(size = 10)
             Pageable pageable
     ) {
-        if (!studentRepository.existsById(rollNo)) {
+        if (!studentService.doesStudentExist(rollNo)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student with id" + rollNo + "not found");
         }
-        return courseService.getCourses(rollNo, pageable);
+        return studentCourseService.getCourses(rollNo, pageable);
     }
 
     @CrossOrigin(origins = "*")
     @GetMapping("/{rollNo}/courses/{courseCode}/{startDate}/calendar")
-    public List<AttendanceCalendarDTO> getMonthlyCalendar(
+    public List<StudentDayStatusDTO> getMonthlyCalendar(
             @PathVariable String rollNo,
             @PathVariable String courseCode,
             @PathVariable LocalDate startDate,

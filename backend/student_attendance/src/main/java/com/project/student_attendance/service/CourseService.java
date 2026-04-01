@@ -1,22 +1,25 @@
 package com.project.student_attendance.service;
 
+import com.project.student_attendance.dto.CourseDTO;
 import com.project.student_attendance.entities.course.Course;
-import com.project.student_attendance.entities.student_course.StudentCourseId;
-import com.project.student_attendance.repository.StudentCourseRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.project.student_attendance.repository.CourseRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CourseService {
 
-    private final StudentCourseRepository repository;
+    private final CourseRepository repository;
 
-    public CourseService(StudentCourseRepository repository) {
+    public CourseService(CourseRepository repository) {
         this.repository = repository;
     }
 
-    public Page<Course> getCourses(String rollNo, Pageable pageable) {
-        return repository.findCoursesByRollNo(rollNo, pageable);
+    public List<CourseDTO> getCoursesFromInstructorId(String instructorId) {
+        return repository.findByInstructorId(instructorId)
+                .stream()
+                .map(Course::mapToDTO)
+                .toList();
     }
 }

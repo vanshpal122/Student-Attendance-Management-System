@@ -29,12 +29,12 @@ public interface StudentCourseRepository
     );
 
     @Query("""
-    SELECT sc.student.rollNo
+    SELECT sc
     FROM StudentCourse sc
     WHERE sc.course.id.courseCode = :courseCode 
       AND sc.course.id.startDate = :startDate
 """)
-    List<String> getEnrolledStudents(
+    List<StudentCourse> getEnrolledStudents(
             @Param("courseCode") String courseCode,
             @Param("startDate") LocalDate startDate
     );

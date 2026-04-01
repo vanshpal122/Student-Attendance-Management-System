@@ -5,9 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name = "branch")
 public class Branch {
@@ -21,4 +23,7 @@ public class Branch {
 
     @OneToMany(mappedBy = "branch")
     private List<Course> courses;
+
+    @OneToMany(mappedBy = "branch")
+    private List<Instructor> instructors;
 }
